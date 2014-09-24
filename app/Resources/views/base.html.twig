@@ -1,0 +1,24 @@
+<html lang="{{ app.request.locale }}" {% if app.environment == 'dev' %}debug="true"{% endif %}>
+    <head>
+        {% block shop_meta %}
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+            <title>{% block title %}Helper{% endblock %}</title>
+            <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% endblock shop_meta %}
+        {% block shop_header %}
+            {% block shop_stylesheets %}
+            {% endblock shop_stylesheets %}
+            {% block shop_header_javascripts %}
+            {% endblock shop_header_javascripts %}
+        {% endblock %}
+    </head>
+    <body class="scroll-top">
+        {% block shop_body %}{% endblock %}
+        {% block shop_footer %}
+            {% block shop_footer_javascripts %}
+            {% endblock shop_footer_javascripts %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "::base.html.twig" %}
+{% block shop_stylesheets %}
+    <link href="{{ asset('bundles/shopfrontoffice/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ asset('bundles/shopfrontoffice/css/shop-homepage.css') }}" rel="stylesheet" type="text/css" media="all" />
+{% endblock shop_stylesheets %}
+{% block shop_header_javascripts %}
+    {% javascripts
+        '@ShopFrontOfficeBundle/Resources/public/lib/jquery/js/jquery-2.1.1.min.js'
+        '@ShopFrontOfficeBundle/Resources/public/lib/bootstrap/js/bootstrap.min.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock shop_header_javascripts %}
