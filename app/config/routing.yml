@@ -1,3 +1,8 @@
+shop_user:
+    resource: "@ShopUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 shop_front_office:
     resource: "@ShopFrontOfficeBundle/Controller/"
     type:     annotation
@@ -5,3 +10,6 @@ shop_front_office:
 
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
+fos_user:
+    resource: "@ShopUserBundle/Resources/config/routing/all.xml"
