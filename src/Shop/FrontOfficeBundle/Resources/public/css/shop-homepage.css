@@ -41,6 +41,14 @@ nav{
     color: white;
 }
 
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: whitesmoke;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: transparent;
+}
+
 .slide-image {
     width: 100%;
 }
