@@ -1,3 +1,13 @@
+#shop_data_grid_generator:
+#    resource: "@ShopDataGridGeneratorBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
+shop_back_office:
+    resource: "@ShopBackOfficeBundle/Controller/"
+    type:     annotation
+    prefix:   /admin/
+
 shop_front_office:
     resource: "@ShopFrontOfficeBundle/Controller/"
     type:     annotation

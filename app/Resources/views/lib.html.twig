@@ -2,7 +2,6 @@
 {% block shop_stylesheets %}
     <link href="{{ asset('bundles/shopfrontoffice/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" media="all" />
     <link href="{{ asset('bundles/shopfrontoffice/lib/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" media="all" />
-    <link href="{{ asset('bundles/shopfrontoffice/css/shop-homepage.css') }}" rel="stylesheet" type="text/css" media="all" />
 {% endblock shop_stylesheets %}
 {% block shop_header_javascripts %}
     {% javascripts
@@ -11,4 +10,6 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% endblock shop_header_javascripts %}

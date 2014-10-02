@@ -1,0 +1,136 @@
+{% extends "ShopBackOfficeBundle::layout.html.twig" %}
+
+{% block shop_content_body %}    
+    <section>
+        <span class="label label-default">Page {{ pagination.getCurrentPageNumber }}/{{ (pagination.getTotalItemCount/pagination.getItemNumberPerPage)|round(0, 'ceil') }}</span>
+        <span class="label label-default">Affiché {{ pagination.getItemNumberPerPage }}</span>
+        <span class="label label-default">Total {{ pagination.getTotalItemCount }}</span>
+    </section>
+    <section>
+        {% set direction = pagination.getDirection() %}
+        <table class="table table-bordered table-striped table-sortable">
+            <thead>
+                <tr>
+                    {# <th>{{ knp_pagination_sortable(pagination, 'Nom', 'p.name') }}</th> #}
+                    <th{% if pagination.isSorted('p.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Nom', 'p.name') }} <i class="pull-right fa fa-sort{% if direction is not null and pagination.isSorted('p.name') %}-{{ direction }}{% endif %} fa-lg"></i></th>
+                    <th{% if pagination.isSorted('p.ref') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Référence', 'p.ref') }} <i class="pull-right fa fa-sort{% if direction is not null and pagination.isSorted('p.ref') %}-{{ direction }}{% endif %} fa-lg"></i></th>
+                    <th{% if pagination.isSorted('p.price') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Prix', 'p.price') }} <i class="pull-right fa fa-sort{% if direction is not null and pagination.isSorted('p.price') %}-{{ direction }}{% endif %} fa-lg"></i></th>
+                    <th style="width: 120px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in pagination %}
+                    <tr {% if loop.index is odd %}class="color"{% endif %}>
+                        {# <td style="width: 150px"><img width="150" src="{{ asset(product.webpath) }}" /></td> #}
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.ref }}</td>
+                        <td>{{ product.price }} €</td>
+                        <td style="text-align: center;">
+                            <button class="btn btn-primary edit_product" data-id="{{ product.id }}"><span class="glyphicon glyphicon-edit"></span></button>
+                            <button class="btn btn-danger remove_product" data-id="{{ product.id }}" data-name="{{ product.name }}" data-ref="{{ product.ref }}"><span class="glyphicon glyphicon-remove"></span></button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr cl>
+                        <td colspan="4" class="text-center">Vous n'avez pas de produit en vente</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-lg-7">
+                        Elément par page
+                    </div>
+                    <div class="col-lg-5">
+                        <select id="nb_elem_by_page" class="form-control">
+                            <option {{ pagination.getItemNumberPerPage == 10 ? 'selected' : '' }} value="10">10</option>
+                            <option {{ pagination.getItemNumberPerPage == 50 ? 'selected' : '' }} value="50">50</option>
+                            <option {{ pagination.getItemNumberPerPage == 100 ? 'selected' : '' }} value="100">100</option>
+                            <option {{ pagination.getItemNumberPerPage == 500 ? 'selected' : '' }} value="500">500</option>
+                            <option {{ pagination.getItemNumberPerPage == 1000 ? 'selected' : '' }} value="1000">1000</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 navigation text-center">
+                {{ knp_pagination_render(pagination, 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}
+            </div>
+        </div>
+    </section>
+
+    <div id="modal_edit_product" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edition d'un produit</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#save').click();$(this).button('loading')" data-loading-text="Chargement...">Sauvegarder les changements</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="modal_remove_product" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Suppression d'un produit</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">Attention, vous êtes sur le point de supprimer l'élément <b id="mess_name_product"></b> référence <b id="mess_ref_product"></b>.<br />Voulez-vous continuer ?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger" onclick="$(this).button('loading')" data-loading-text="Suppression en cour..." id="valid_remove_elem">Supprimer cet élément</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <style>
+        .table-sortable thead{
+            color: #eee;
+        }
+        .table-sortable th.sorted{
+            color: #000;
+        }
+    </style>
+
+    <script>
+        (function($){
+            $(document).ready(function(){
+                $(".edit_product").click(function(){
+                    $("#modal_edit_product .modal-body").html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-5x center-block"></i></div>');
+                    $("#modal_edit_product .modal-body").load(Routing.generate('admin_product_edit',{id:$(this).data('id')}));
+                    $("#modal_edit_product").modal('show');
+                });
+                
+                $(".remove_product").click(function(){
+                    $("#mess_name_product").html($(this).data('name'));
+                    $("#mess_ref_product").html($(this).data('ref'));
+                    $("#valid_remove_elem").data('id',$(this).data('id'));
+                    $("#modal_remove_product").modal('show');
+                });
+                
+                $("#valid_remove_elem").click(function(){
+                    $.get(Routing.generate('admin_product_remove',{id:$(this).data('id')}),function(){
+                        $(location).attr('href','{{ app.request.requesturi }}');
+                    });
+                });
+                
+                $("#nb_elem_by_page").change(function(){
+                    $(location).attr('href',Routing.generate('admin_product_list',{nb:$(this).val()}));
+                });
+            });
+        })(jQuery)
+    </script>
+{% endblock %}

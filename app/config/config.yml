@@ -33,9 +33,6 @@ fos_user:
     registration:
         confirmation:
             enabled:    true
-    from_email:
-        address:        noreply@acmedemo.com
-        sender_name:    Acme Demo App
 
 # Twig Configuration
 twig:
@@ -46,7 +43,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ShopBackOfficeBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="shop_user")
+ * @ORM\Table(name="User")
  */
 class User extends BaseUser
 {
@@ -17,4 +17,17 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Shop\BackOfficeBundle\Entity\Caddy", cascade={"persist"})
+     */
+    protected $caddy;
+
+    function setCaddy(Caddy $caddy = null) {
+        $this->caddy = $caddy;
+    }
+    
+    function getCaddy() {
+        return $this->caddy;
+    }
 }
