@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Shop\UserBundle\ShopUserBundle(),
             new Shop\BackOfficeBundle\ShopBackOfficeBundle(),
-            //new Shop\DataGridGeneratorBundle\ShopDataGridGeneratorBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
 
         );
