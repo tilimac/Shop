@@ -30,8 +30,7 @@ class ProductController extends Controller {
                     true  => 'Activer',
                     false => 'Desactiver'
                 ),
-                'expanded' => true,
-                'multiple' => false
+                'data' => true
             ))
             ->getForm();
 
