@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Shop\BackOfficeBundle\Entity\Product;
 
+use Shop\BackOfficeBundle\Form\Type\ProductType;
+
 /**
  * @Route("/product")
  */
@@ -18,21 +20,8 @@ class ProductController extends Controller {
      */
     public function newAction(){
         $product = new Product();
-
-        $form = $this->createFormBuilder($product)
-            ->add('ref', 'text')
-            ->add('name', 'text')
-            ->add('file')
-            ->add('description', 'textarea')
-            ->add('price', 'text',array('max_length' => 6))
-            ->add('active', 'choice', array(
-                'choices'  => array(
-                    true  => 'Activer',
-                    false => 'Desactiver'
-                ),
-                'data' => true
-            ))
-            ->getForm();
+        
+        $form = $this->createForm('product', $product);
 
         if ($this->getRequest()->isMethod('POST')) {
             $request = $this->getRequest();
@@ -68,13 +57,7 @@ class ProductController extends Controller {
             $productManager = $this->get('shop_product.manager');
             $product = $productManager->getProductById($id);
 
-            $form = $this->createFormBuilder($product)
-                ->add('ref', 'text')
-                ->add('name', 'text')
-                ->add('file')
-                ->add('description', 'textarea')
-                ->add('price', 'text',array('max_length' => 6))
-                ->getForm();
+            $form = $this->createForm('product', $product);
         
             $request = $this->getRequest();
             $form->handleRequest($request);
@@ -112,13 +95,7 @@ class ProductController extends Controller {
         $productManager = $this->get('shop_product.manager');
         $product = $productManager->getProductById($id);
 
-        $form = $this->createFormBuilder($product)
-            ->add('ref', 'text')
-            ->add('name', 'text')
-            ->add('file')
-            ->add('description', 'textarea')
-            ->add('price', 'text',array('max_length' => 6))
-            ->getForm();
+        $form = $this->createForm('product', $product);
         
         return array(
             'form' => $form->createView(),

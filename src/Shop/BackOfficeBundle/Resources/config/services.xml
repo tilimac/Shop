@@ -8,5 +8,8 @@
         <service id="shop_product.manager" class="Shop\BackOfficeBundle\Manager\ProductManager">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
+        <service id="shop_backoffice.form.type.product" class="Shop\BackOfficeBundle\Form\Type\ProductType">
+            <tag name="form.type" alias="product" />
+        </service>
     </services>
 </container>

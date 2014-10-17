@@ -38,6 +38,9 @@ fos_user:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:
+            - 'ShopBackOfficeBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

@@ -2,83 +2,417 @@
 
 {% block shop_content_body %}
     <!-- Page Content -->
-    <div class="container">
 
-        <div class="row">
 
-            <div class="col-md-3">
-                <p class="lead">Catégorie</p>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Category 1</a>
-                    <a href="#" class="list-group-item">Category 2</a>
-                    <a href="#" class="list-group-item">Category 3</a>
+    <div id="canvas">
+
+        <div class="zoom-icon zoom-icon-in"></div>
+
+        <div class="magazine-viewport">
+            <div class="container-magazine">
+                <div class="magazine">
+                    <!-- Next button -->
+                    <div ignore="1" class="next-button"></div>
+                    <!-- Previous button -->
+                    <div ignore="1" class="previous-button"></div>
                 </div>
             </div>
-
-            <div class="col-md-9">
-
-                <div class="row carousel-holder">
-
-                    <div class="col-md-12">
-                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="item active">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                                </div>
-                                <div class="item">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                                </div>
-                                <div class="item">
-                                    <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                                </div>
-                            </div>
-                            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                                <span class="glyphicon glyphicon-chevron-left"></span>
-                            </a>
-                            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </a>
-                        </div>
-                    </div>
-
+            <div class="bottom">
+                <div id="slider-bar" class="turnjs-slider">
+                    <div id="slider"></div>
                 </div>
-
-                <div class="row">
-                    {% for i in 0..10 %}
-                        <div class="col-sm-4 col-lg-3">
-                            <div class="thumbnail">
-                                <div class="img-produit" style="position: relative;">
-                                    <div style="position: absolute; background-color: white; padding: 5px; font-weight: bold; bottom: 0px; border-top-right-radius: 5px; border-top-left-radius: 5px; right: 5px;">$64.99</div>
-                                    <img alt="" src="http://placehold.it/250x150">
-                                </div>
-                                <div class="caption">
-                                    <h4>
-                                        <a href="#">Produit</a>
-                                    </h4>
-                                    <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                    <div class="col-sm-4 col-lg-3">
-                        <h4><a href="#">Like this template?</a>
-                        </h4>
-                        <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
-                        <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
-                    </div>
-
-                </div>
-
             </div>
-
         </div>
-
     </div>
+    <div style="float: right">
+        test
+    </div>
+    
+    <style>
+        #slider-bar.turnjs-slider {
+            height: 20px;
+            margin: 20px auto;
+            width: 600px;
+        }
+        
+        #slider-bar .ui-slider {
+            height: 100%;
+            margin-left: 0px;
+            width: 580px
+        }
+        
+        #slider-bar .ui-slider-handle {
+            height: 30px;
+            background-color: #428bca;
+            box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+            opacity: 1;
+            margin-top: -5px;
+            border: none;
+            margin-left: 0px;
+            width: 20px;
+            cursor: e-resize;
+        }
+        #canvas{
+            margin-top: 85px;
+            margin-right: 400px;
+            position: relative;
+            background-image: url("/bundles/shopfrontoffice/images/bg-catalogue.png");
+        }
+        .magazine-viewport{
+            -moz-box-shadow: 0 0 20px #111 inset;
+            -webkit-box-shadow: 0 0 20px #111 inset;
+            -o-box-shadow: 0 0 20px #111 inset;
+            box-shadow: 0 0 20px #111 inset;
+        }
+    </style>
+    
+    
+    
+    
+    <script type="text/javascript">
+
+        function loadApp() {
+
+            $('#canvas').fadeIn(1000);
+
+            var flipbook = $('.magazine');
+
+            // Check if the CSS was already loaded
+
+            if (flipbook.width() == 0 || flipbook.height() == 0) {
+                setTimeout(loadApp, 10);
+                return;
+            }
+
+            // Create the flipbook
+
+            flipbook.turn({
+                // Magazine width
+
+                width: 922,
+                // Magazine height
+
+                height: 600,
+                // Duration in millisecond
+
+                duration: 1000,
+                // Enables gradients
+
+                gradients: true,
+                // Auto center this flipbook
+
+                autoCenter: true,
+                // Elevation from the edge of the flipbook when turning a page
+
+                elevation: 50,
+                // The number of pages
+
+                pages: 64,
+                // Events
+
+                when: {
+                    turning: function (event, page, view) {
+
+                        var book = $(this),
+                                currentPage = book.turn('page'),
+                                pages = book.turn('pages');
+
+                        // Update the current URI
+
+                        Hash.go('page/' + page).update();
+
+                        // Show and hide navigation buttons
+
+                        disableControls(page);
+
+                    },
+                    turned: function (event, page, view) {
+
+                        disableControls(page);
+
+                        $(this).turn('center');
+
+                        $('#slider').slider('value', getViewNumber($(this), page));
+
+                        if (page == 1) {
+                            $(this).turn('peel', 'br');
+                        }
+
+                    },
+                    missing: function (event, pages) {
+
+                        // Add pages that aren't in the magazine
+
+                        for (var i = 0; i < pages.length; i++)
+                            addPage(pages[i], $(this));
+
+                    }
+                }
+
+            });
+
+            // Zoom.js
+
+            $('.magazine-viewport').zoom({
+                flipbook: $('.magazine'),
+                max: function () {
+
+                    return largeMagazineWidth() / $('.magazine').width();
+
+                },
+                when: {
+                    swipeLeft: function () {
+
+                        $(this).zoom('flipbook').turn('next');
+
+                    },
+                    swipeRight: function () {
+
+                        $(this).zoom('flipbook').turn('previous');
+
+                    },
+                    resize: function (event, scale, page, pageElement) {
+
+                        if (scale == 1)
+                            loadSmallPage(page, pageElement);
+                        else
+                            loadLargePage(page, pageElement);
+
+                    },
+                    zoomIn: function () {
+
+                        $('#slider-bar').hide();
+                        $('.made').hide();
+                        $('.magazine').removeClass('animated').addClass('zoom-in');
+                        $('.zoom-icon').removeClass('zoom-icon-in').addClass('zoom-icon-out');
+
+                        if (!window.escTip && !$.isTouch) {
+                            escTip = true;
+
+                            $('<div />', {'class': 'exit-message'}).
+                                    html('<div>Press ESC to exit</div>').
+                                    appendTo($('body')).
+                                    delay(2000).
+                                    animate({opacity: 0}, 500, function () {
+                                        $(this).remove();
+                                    });
+                        }
+                    },
+                    zoomOut: function () {
+
+                        $('#slider-bar').fadeIn();
+                        $('.exit-message').hide();
+                        $('.made').fadeIn();
+                        $('.zoom-icon').removeClass('zoom-icon-out').addClass('zoom-icon-in');
+
+                        setTimeout(function () {
+                            $('.magazine').addClass('animated').removeClass('zoom-in');
+                            resizeViewport();
+                        }, 0);
+
+                    }
+                }
+            });
+
+            // Zoom event
+
+            if ($.isTouch)
+                $('.magazine-viewport').bind('zoom.doubleTap', zoomTo);
+            else
+                $('.magazine-viewport').bind('zoom.tap', zoomTo);
+
+
+            // Using arrow keys to turn the page
+
+            $(document).keydown(function (e) {
+
+                var previous = 37, next = 39, esc = 27;
+
+                switch (e.keyCode) {
+                    case previous:
+
+                        // left arrow
+                        $('.magazine').turn('previous');
+                        e.preventDefault();
+
+                        break;
+                    case next:
+
+                        //right arrow
+                        $('.magazine').turn('next');
+                        e.preventDefault();
+
+                        break;
+                    case esc:
+
+                        $('.magazine-viewport').zoom('zoomOut');
+                        e.preventDefault();
+
+                        break;
+                }
+            });
+
+            // URIs - Format #/page/1 
+
+            Hash.on('^page\/([0-9]*)$', {
+                yep: function (path, parts) {
+                    var page = parts[1];
+
+                    if (page !== undefined) {
+                        if ($('.magazine').turn('is'))
+                            $('.magazine').turn('page', page);
+                    }
+
+                },
+                nop: function (path) {
+
+                    if ($('.magazine').turn('is'))
+                        $('.magazine').turn('page', 1);
+                }
+            });
+
+
+            $(window).resize(function () {
+                resizeViewport();
+            }).bind('orientationchange', function () {
+                resizeViewport();
+            });
+
+            // Regions
+
+            if ($.isTouch) {
+                $('.magazine').bind('touchstart', regionClick);
+            } else {
+                $('.magazine').click(regionClick);
+            }
+
+            // Events for the next button
+
+            $('.next-button').bind($.mouseEvents.over, function () {
+
+                $(this).addClass('next-button-hover');
+
+            }).bind($.mouseEvents.out, function () {
+
+                $(this).removeClass('next-button-hover');
+
+            }).bind($.mouseEvents.down, function () {
+
+                $(this).addClass('next-button-down');
+
+            }).bind($.mouseEvents.up, function () {
+
+                $(this).removeClass('next-button-down');
+
+            }).click(function () {
+
+                $('.magazine').turn('next');
+
+            });
+
+            // Events for the next button
+
+            $('.previous-button').bind($.mouseEvents.over, function () {
+
+                $(this).addClass('previous-button-hover');
+
+            }).bind($.mouseEvents.out, function () {
+
+                $(this).removeClass('previous-button-hover');
+
+            }).bind($.mouseEvents.down, function () {
+
+                $(this).addClass('previous-button-down');
+
+            }).bind($.mouseEvents.up, function () {
+
+                $(this).removeClass('previous-button-down');
+
+            }).click(function () {
+
+                $('.magazine').turn('previous');
+
+            });
+
+
+            // Slider
+
+            $("#slider").slider({
+                min: 1,
+                max: numberOfViews(flipbook),
+                start: function (event, ui) {
+
+                    /*if (!window._thumbPreview) {
+                        _thumbPreview = $('<div />', {'class': 'thumbnail'}).html('<div></div>');
+                        setPreview(ui.value);
+                        _thumbPreview.appendTo($(ui.handle));
+                    } else
+                        setPreview(ui.value);*/
+
+                    moveBar(false);
+
+                },
+                slide: function (event, ui) {
+
+                    //setPreview(ui.value);
+
+                },
+                stop: function () {
+
+                    if (window._thumbPreview)
+                        _thumbPreview.removeClass('show');
+
+                    $('.magazine').turn('page', Math.max(1, $(this).slider('value') * 2 - 2));
+
+                }
+            });
+
+            resizeViewport();
+
+            $('.magazine').addClass('animated');
+
+        }
+
+    // Zoom icon
+
+        $('.zoom-icon').bind('mouseover', function () {
+
+            if ($(this).hasClass('zoom-icon-in'))
+                $(this).addClass('zoom-icon-in-hover');
+
+            if ($(this).hasClass('zoom-icon-out'))
+                $(this).addClass('zoom-icon-out-hover');
+
+        }).bind('mouseout', function () {
+
+            if ($(this).hasClass('zoom-icon-in'))
+                $(this).removeClass('zoom-icon-in-hover');
+
+            if ($(this).hasClass('zoom-icon-out'))
+                $(this).removeClass('zoom-icon-out-hover');
+
+        }).bind('click', function () {
+
+            if ($(this).hasClass('zoom-icon-in'))
+                $('.magazine-viewport').zoom('zoomIn');
+            else if ($(this).hasClass('zoom-icon-out'))
+                $('.magazine-viewport').zoom('zoomOut');
+
+        });
+
+        $('#canvas').hide();
+
+
+        // Load the HTML4 version if there's not CSS transform
+        yepnope({
+            test: Modernizr.csstransforms,
+            yep: ['/bundles/shopfrontoffice/lib/turnjs4/lib/turn.min.js'],
+            nope: ['/bundles/shopfrontoffice/lib/turnjs4/lib/turn.html4.min.js', '/bundles/shopfrontoffice/lib/turnjs4/samples/magazine/css/jquery.ui.html4.css'],
+            both: ['/bundles/shopfrontoffice/lib/turnjs4/lib/zoom.min.js', '/bundles/shopfrontoffice/lib/turnjs4/samples/magazine/css/jquery.ui.css', '/bundles/shopfrontoffice/lib/turnjs4/samples/magazine/js/magazine.js', '/bundles/shopfrontoffice/lib/turnjs4/samples/magazine/css/magazine.css'],
+            complete: loadApp
+        });
+
+    </script>
+
     <!-- /.container -->
 {% endblock %}
